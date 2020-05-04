@@ -2,53 +2,68 @@
 
 namespace Listas
 {
+    //clase publica para tests de unidad
     public class Lista
     {
         //clase privada
-        private class Nodo
+        class Nodo
         {
-            public int dato; //información (puede ser de cualquier tipo)
-            public Nodo sig; //siguiente elemento de la lista
+            public int dato;
+            public Nodo sig; //enlace al siguiente nodo
+            //constructoras
+            public Nodo(int e) { dato = e; sig = null; }
+            public Nodo(int e, Nodo n) { dato = e; sig = n; }
+        }
+        //atributos de la lista enlazada: referencia al primero y al ultimo
+        Nodo pri, ult;
+        int nElems;
+
+        public Lista() //constructora de la clase
+        {
+            pri = ult = null; //iniciamos comienzo y final
+            nElems = 0; //iniciamos numero de elementos
         }
 
-        Nodo pri; //primer nodo de la lista
-
-        public Lista() //constructor
+        public Lista (int limite, int repeticiones) //constructora lista no vacía (TESTS DE UNIDAD)
         {
-            pri = null; //incializamos el puntero a null
-        }
-
-        public void Inserta(int e) //metodo para insertar elementos en la lista (al final de esta)
-        {
-            if (pri == null) //lista vacía
+            pri = ult = null; //iniciamos comienzo y final
+            nElems = 0; //iniciamos numero de elementos
+            for(int i = 0; i < repeticiones; i++) //para cada repeticion
             {
-                pri = new Nodo(); //creamos el comienzo de la lista
-                //le asignamos el dato y el siguiente nodo
-                pri.dato = e;
-                pri.sig = null;
-            }
-            else //lista no vacía
-            {
-                Nodo aux = pri; //nodo auxiliar que empieza en pri
-                while (aux.sig != null) //buscamos el último elemento de la lista
+                for(int j = 0; j < limite; j++) //añadimos los valores
                 {
-                    aux = aux.sig;
+                    //si es el primero, iniciamos "pri" y "ult" a este
+                    if (pri == null) pri = ult = new Nodo(j);
+                    else //en caso contrario
+                    {
+                        //asignamos un nuevo nodo al final, y avanzamos "ult" un nodo
+                        ult.sig = new Nodo(i);
+                        ult = ult.sig;
+                    }
+                    nElems++;
                 }
-                //creamos un nuevo nodo al final con el dato introducido
-                aux.sig = new Nodo();
-                aux = aux.sig;
-                aux.dato = e;
-                aux.sig = null;
             }
         }
 
-        public bool BuscaDato(int e) //metodo para buscar un elemento en la lista
+        public void Inserta(int e) //metodo para insertar elementos al final de la lista
+        {
+            if (ult == null) pri = ult = new Nodo(e); //si esta vacía, la inicamos con ese elemento
+            else //en caso contrario
+            {
+                //reasignamos el último elemento a este
+                ult.sig = new Nodo(e);
+                ult = ult.sig;
+            }
+            nElems++; //aumentamos el numero de elementos
+        }
+
+        public bool BuscaDato(int e) //metodo para buscar un dato en la lista
         {
             Nodo aux = BuscaNodo(e); //busca el nodo 
-            return (aux != null); //devuelve si existe (!=) o no (==)
+            return (aux != null); //devolvemos si existe o no
         }
 
-        private Nodo BuscaNodo(int e) //metodo auxiliar para buscar el nodo
+        private Nodo BuscaNodo(int e) //metodo de busqueda de un nodo con un dato en especifico
         {
             Nodo aux = pri; //referencia al primero
             while (aux != null && aux.dato != e) //búsqueda de nodo con el elemento 'e'
@@ -56,22 +71,13 @@ namespace Listas
                 aux = aux.sig;
             }
 
-            //termina con aux==null (elemento no encontrado) o bien con aux apuntando al primer nodo con elemento 'e'
+            //termina con aux==null (elto no encontrado) o bien con aux apuntando al primer nodo con elemento e
             return aux;
         }
 
         public int CuentaElementos() //metodo que cuenta el numero de elementos en la lista
         {
-            Nodo aux = pri; //Nodo auxiliar que empieza en pri
-            int cont = 0;
-            while (aux != null) //para cada elemento que exista
-            {
-                cont++; //aumentamos el contador
-                aux = aux.sig;
-            }
-
-            //devolvemos el numero de elementos
-            return cont;
+            return nElems; //devolvemos el numero de elementos
         }
 
         public int N_Esimo(int n) //metodo que devuelve el n-esimo nodo
@@ -80,7 +86,7 @@ namespace Listas
 
             if (aux == null) //en caso de no estar, lanzamos la excepcion
             {
-                throw new Exception("No existe ese elemento.");
+                throw new Exception("The element doesn't exists.");
             }
 
             //si está, devolvemos el dato
@@ -116,6 +122,8 @@ namespace Listas
             {
                 //movemos pri al siguiente de pri (segundo elemento)
                 pri = pri.sig;
+                nElems--; //descontamos el numero de elementos
+                if (pri == null) ult = null; //si es una lista de 1, y lo quitamos, actualizamos ult
                 return true;
             }
             else
@@ -132,9 +140,11 @@ namespace Listas
                     return false;
                 }
 
+                if (aux.sig == ult) ult = aux; //si el elemento es el ultimo, actualizamos su referencia
                 //en caso de que esté, hacemos que el siguiente al dato
                 //pase a ser el siguiente del anterior al dato
                 aux.sig = aux.sig.sig;
+                nElems--; //descontamos el numero de elementos
                 //devolvemos true
                 return true;
             }

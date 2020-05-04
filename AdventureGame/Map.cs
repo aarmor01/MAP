@@ -107,7 +107,7 @@ namespace Adventure
         private void CreateRoom(string linea) //metodo para crear una sala en el mapa
         {
             //dividimos el comando
-            string[] comando = linea.Trim().Split(' ');
+            string[] comando = linea.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int roomIndex = FindRoomByName(comando[1]); //buscamos si la sala ya existe
 
             if (roomIndex == -1) //si no existiese la sala previamente
@@ -131,7 +131,7 @@ namespace Adventure
         private void EstablishConnections(string linea) //metodo para establecer la conexion entre dos salas
         {
             //dividimos el comando
-            string[] comando = linea.Trim().Split(' ');
+            string[] comando = linea.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int dirIndex = GetDirection(comando[2]); //buscamos la direccion
 
             //si no existe esa direccion, lanzamos excepcion
@@ -163,7 +163,7 @@ namespace Adventure
         private void CreateItem(string linea) //metodo para crear un item en el mapa
         {
             //dividimos el comando
-            string[] comando = linea.Trim().Split(' ');
+            string[] comando = linea.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int itemIndex = FindItemByName(comando[1]); //buscamos si el item ya existe
 
             if (itemIndex == -1) //si no existiese el item previamente
@@ -193,7 +193,7 @@ namespace Adventure
         private void InsertEntryRoom(string linea) //metodo para establecer el comienzo de la partida (sala origen) 
         {
             //dividimos el comando
-            string[] comando = linea.Trim().Split(' ');
+            string[] comando = linea.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int roomIndex = FindRoomByName(comando[1]); //buscamos la sala
 
             //si existe la sala, guardamos su indice como entrada
@@ -204,7 +204,7 @@ namespace Adventure
         private void EstablishExit(string linea) //metodo para establecer la sala de salida
         {
             //dividimos el comando
-            string[] comando = linea.Trim().Split(' ');
+            string[] comando = linea.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int roomIndex = FindRoomByName(comando[1]); //buscamos la sala
 
             //si existe la sala, la hacemos salida
@@ -215,7 +215,7 @@ namespace Adventure
         private string ReadDescription(string linea) //metodo para devolver la descripcion de una sala o item
         {
             //devolvemos el string descripcion entrecomillado
-            return "\"" + linea.Split('\"')[1] + "\"";
+            return "\"" + linea.Split(new char[] { '\"' }, StringSplitOptions.RemoveEmptyEntries)[1] + "\"";
         }
 
         private void InitializeConns(int[] conns) //metodo para inicializar las conexiones

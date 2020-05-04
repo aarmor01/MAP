@@ -7,7 +7,7 @@ namespace Adventure
     {
         //constante de sobredimension del mapa
         const int N = 100;
-        //string con el nombre del archivo (lo hago estatico para que no sea necesario introducirlo como parametro en SaveGame
+        //string con el nombre del archivo (lo hago estatico para que no sea necesario introducirlo como parametro en SaveGame)
         static string file;
 
         static void Main()
@@ -44,172 +44,176 @@ namespace Adventure
         {
             bool validCommand = true; //booleano de validez del comando
             quit = false; //establecemos el booleano de salida a false temporalmente
-            string[] command = com.Trim().Split(' '); //dividimos el comando
-            switch (command[0]) //comprobamos el inicio del comando
+            string[] command = com.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries); //dividimos el comando
+
+            if (command.Length > 0) //si ha escrito algo
             {
-                case "go": //caso go (movimiento)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 2) throw new Exception("Invalid command.");
-                        int dir = GetDirection(command[1]); //guardamos la direccion
-                        if (dir != -1) //si es valida
+                switch (command[0]) //comprobamos el inicio del comando
+                {
+                    case "go": //caso go (movimiento)
+                        try
                         {
-                            //comprobamaos si el movimiento es válido
-                            //si no es valido, lanzamos excepcion
-                            if (!p.Move(m, (Direction)dir)) throw new Exception("There's no connection in that direction.");
-                            else InfoPlace(m, p.GetPosition()); //si es valido, imprimimos la informacion de la nueva sala
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 2) throw new Exception("Invalid command.");
+                            int dir = GetDirection(command[1]); //guardamos la direccion
+                            if (dir != -1) //si es valida
+                            {
+                                //comprobamaos si el movimiento es válido
+                                //si no es valido, lanzamos excepcion
+                                if (!p.Move(m, (Direction)dir)) throw new Exception("There's no connection in that direction.");
+                                else InfoPlace(m, p.GetPosition()); //si es valido, imprimimos la informacion de la nueva sala
+                            }
+                            else throw new Exception("Invalid direction.");
                         }
-                        else throw new Exception("Invalid direction.");
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "pick": //caso pick (recoger item)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 2) throw new Exception("Invalid command.");
-                        p.PickItem(m, command[1]); //en caso contrario, cogemos el item
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "look": //caso look (onjetos en la sala)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, imprimimos la informacion de los items de la sala actual
-                        Console.WriteLine(m.GetInfoItemsInRoom(p.GetPosition()));
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "info": //caso info (movimientos posibles)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, imprimimos la informacion de la sala actual
-                        InfoPlace(m, p.GetPosition());
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "inventory": //caso inventory (informacion inventario)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, imprimimos la informacion de los items del inventario
-                        Console.WriteLine(p.GetInventoryInfo(m));
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "eat": //caso eat (comer item)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 2) throw new Exception("Invalid command.");
-                        p.EatItem(m, command[1]); //en caso contrario, ingerimos el item
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "drop": //caso drop (soltar item en sala)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 2) throw new Exception("Invalid command.");
-                        p.DropItem(m, command[1]); //en caso contrario, soltamos el item
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "me": //caso me (informacion del jugador)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, imprimimos la informacion del jugador
-                        Console.WriteLine(p.GetPlayerInfo());
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "quit": //caso quit (salir del juego)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, guardamos partida y salimos (quit == true)
-                        SaveGame(p, m);
-                        quit = true;
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "help": //caso help (movimiento)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, imprimimos la informacion de los comandos
-                        Console.WriteLine(Commands());
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                case "clear": //caso clear (para depurar, comando de limpieza de pantalla)
-                    try
-                    {
-                        //si el comando no cumple su formato, lanzamos excepcion
-                        if (command.Length != 1) throw new Exception("Invalid command.");
-                        //en caso contrario, limpiamos panntalla
-                        Console.Clear();
-                    }
-                    catch (Exception e) //en caso de haber ocurrido una excepcion
-                    {
-                        Console.WriteLine(e.Message); //escribimos su mensaje
-                        validCommand = false; //establecemos la validez del comando a falso
-                    }
-                    break;
-                default: //en caso de no ser ninguno de esos comandos 
-                    Console.WriteLine("Invalid command.");
-                    validCommand = false;
-                    break;
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "pick": //caso pick (recoger item)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 2) throw new Exception("Invalid command.");
+                            p.PickItem(m, command[1]); //en caso contrario, cogemos el item
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "look": //caso look (onjetos en la sala)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, imprimimos la informacion de los items de la sala actual
+                            Console.WriteLine(m.GetInfoItemsInRoom(p.GetPosition()));
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "info": //caso info (movimientos posibles)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, imprimimos la informacion de la sala actual
+                            InfoPlace(m, p.GetPosition());
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "inventory": //caso inventory (informacion inventario)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, imprimimos la informacion de los items del inventario
+                            Console.WriteLine(p.GetInventoryInfo(m));
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "eat": //caso eat (comer item)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 2) throw new Exception("Invalid command.");
+                            p.EatItem(m, command[1]); //en caso contrario, ingerimos el item
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "drop": //caso drop (soltar item en sala)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 2) throw new Exception("Invalid command.");
+                            p.DropItem(m, command[1]); //en caso contrario, soltamos el item
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "me": //caso me (informacion del jugador)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, imprimimos la informacion del jugador
+                            Console.WriteLine(p.GetPlayerInfo());
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "quit": //caso quit (salir del juego)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, guardamos partida y salimos (quit == true)
+                            SaveGame(p, m);
+                            quit = true;
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "help": //caso help (movimiento)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, imprimimos la informacion de los comandos
+                            Console.WriteLine(Commands());
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    case "clear": //caso clear (para depurar, comando de limpieza de pantalla)
+                        try
+                        {
+                            //si el comando no cumple su formato, lanzamos excepcion
+                            if (command.Length != 1) throw new Exception("Invalid command.");
+                            //en caso contrario, limpiamos panntalla
+                            Console.Clear();
+                        }
+                        catch (Exception e) //en caso de haber ocurrido una excepcion
+                        {
+                            Console.WriteLine(e.Message); //escribimos su mensaje
+                            validCommand = false; //establecemos la validez del comando a falso
+                        }
+                        break;
+                    default: //en caso de no ser ninguno de esos comandos 
+                        Console.WriteLine("Invalid command.");
+                        validCommand = false;
+                        break;
+                }
             }
 
             //devolvemos si el comando es válido o no
@@ -297,25 +301,26 @@ namespace Adventure
             //creamos flujo de lectura
             StreamReader partidaGuardada = new StreamReader("partidaGuardada.txt");
 
-            map.ReadMap(partidaGuardada.ReadLine()); //creamos el mapa con el archivo original, sin ninguna variacion
+            file = partidaGuardada.ReadLine();
+            map.ReadMap(file); //creamos el mapa con el archivo original, sin ninguna variacion
 
             //saltamos dos lineas
             partidaGuardada.ReadLine();
             partidaGuardada.ReadLine();
 
             //leemos la linea, y la dividimos
-            string[] playerInfo = partidaGuardada.ReadLine().Split(' ');
+            string[] playerInfo = partidaGuardada.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             //creamos al jugador con los valores de la linea
             player = new Player(playerInfo[0], int.Parse(playerInfo[1]), int.Parse(playerInfo[2]), int.Parse(playerInfo[3]));
-            //restauramos el inventario con respecto a la siguiente linea
-            player.RestoreInventory(partidaGuardada.ReadLine().Split(' '), map);
+            //restauramos el inventario con respecto a la siguiente linea, solo si hay elementos en el inventario
+            player.RestoreInventory(partidaGuardada.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries), map);
 
             //saltamos dos lineas
             partidaGuardada.ReadLine();
             partidaGuardada.ReadLine();
 
             //leemos la linea, y la dividimos
-            string[] itemLoc = partidaGuardada.ReadLine().Split(' ');
+            string[] itemLoc = partidaGuardada.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             map.RestoreLocation(itemLoc); //restauramos localizaciones de los items con respecto a los datos del archivo
 
             partidaGuardada.Close(); //cerramos flujo
