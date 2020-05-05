@@ -2,7 +2,7 @@
 
 namespace Listas
 {
-    //clase publica para tests de unidad
+    //clase publica para TESTS DE UNIDAD
     public class Lista
     {
         //clase privada
@@ -16,7 +16,7 @@ namespace Listas
         }
         //atributos de la lista enlazada: referencia al primero y al ultimo
         Nodo pri, ult;
-        int nElems;
+        public int nElems; //publico para TESTS DE UNIDAD
 
         public Lista() //constructora de la clase
         {
@@ -24,26 +24,28 @@ namespace Listas
             nElems = 0; //iniciamos numero de elementos
         }
 
+        #region ContructorTestsUnidad
         public Lista (int limite, int repeticiones) //constructora lista no vacía (TESTS DE UNIDAD)
         {
             pri = ult = null; //iniciamos comienzo y final
             nElems = 0; //iniciamos numero de elementos
             for(int i = 0; i < repeticiones; i++) //para cada repeticion
             {
-                for(int j = 0; j < limite; j++) //añadimos los valores
+                for(int j = 1; j <= limite; j++) //añadimos los valores
                 {
                     //si es el primero, iniciamos "pri" y "ult" a este
                     if (pri == null) pri = ult = new Nodo(j);
                     else //en caso contrario
                     {
                         //asignamos un nuevo nodo al final, y avanzamos "ult" un nodo
-                        ult.sig = new Nodo(i);
+                        ult.sig = new Nodo(j);
                         ult = ult.sig;
                     }
                     nElems++;
                 }
             }
         }
+        #endregion
 
         public void Inserta(int e) //metodo para insertar elementos al final de la lista
         {
@@ -149,5 +151,19 @@ namespace Listas
                 return true;
             }
         }
+
+        #region MetodosTestsUnidad
+        public string VerLista() //metodo que devuelve la lista en string para los tests de unidad
+        {
+            string lista = "";
+            Nodo aux = pri;
+            while (aux != null)
+            {
+                lista += aux.dato + "_";
+                aux = aux.sig;
+            }
+            return lista;
+        }
+        #endregion
     }
 }
