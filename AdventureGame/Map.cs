@@ -456,26 +456,33 @@ namespace Adventure
             }
 
             //bucle para establecer conexiones
-            for (int i = 0; i < nRooms; i++)
+            for (int i = 0; i < nRooms - 1; i++)
             {
-                if (i < nRooms - 2)
+                if (i <= 2)
                 {
                     rooms[i].connections[0] = i + 1;
                     rooms[i + 1].connections[1] = i;
-                    rooms[i].connections[2] = i + 2;
-                    rooms[i + 2].connections[3] = i;
                 }
                 else
                 {
-                    rooms[i].connections[1] = i - 1;
-                    rooms[i - 1].connections[0] = i;
-                    rooms[i].connections[3] = i + 2;
-                    rooms[i - 2].connections[2] = i;
+                    rooms[i].connections[1] = i + 1;
+                    rooms[i + 1].connections[0] = i;
                 }
             }
+            //concretamos algunas conexiones especiales
+            rooms[1].connections[2] = 4;
+            rooms[3].connections[3] = 2;
+            rooms[2].connections[0] = -1;
+            rooms[5].connections[1] = -1;
 
             entryRoom = entryRoomIndex;
             rooms[exitRoom].exit = true;
+        }
+
+        //metodo auxiliar para tests de unidad que devuelve el numero de elementos en la sala introducida
+        public int GetNumeroElementosSala(int sala)
+        {
+            return rooms[sala].itemsInRoom.CuentaElementos();
         }
         #endregion
     }
