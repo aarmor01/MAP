@@ -484,6 +484,12 @@ namespace Adventure
         {
             return rooms[sala].itemsInRoom.CuentaElementos();
         }
+
+        //metodo auxiliar para tests de unidad que devuelve un string con los elementos de la sala
+        public string GetListaElementosSala(int sala)
+        {
+            return rooms[sala].itemsInRoom.VerLista();
+        }
         #endregion
     }
 }
