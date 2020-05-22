@@ -5,7 +5,7 @@ using Listas;
 namespace Adventure
 {
     public enum Direction { North, South, East, West };
-    class Map
+    public class Map
     {
         //items
         public struct Item
@@ -428,5 +428,55 @@ namespace Adventure
                 }
             }
         }
+
+        #region MetodosTestsMap
+        public void CreateMap(int numHabs, int numItems, int[] localizations, int exitRoom, int entryRoomIndex)
+        {
+            //bucle de creación de habitaciones
+            for (int i = 0; i < numHabs; i++)
+            {
+                rooms[nRooms].description = "Esta es la sala " + nRooms;
+                rooms[nRooms].connections = new int[4];
+                InitializeConns(rooms[nRooms].connections);
+                rooms[nRooms].name = "Sala " + nRooms;
+                rooms[nRooms].exit = false;
+                rooms[nRooms].itemsInRoom = new Lista();
+                nRooms++;
+            }
+
+            //bucle de creación de items
+            for (int i = 0; i < numItems; i++)
+            {
+                items[nItems].description = "Este es el item " + nItems;
+                items[nItems].name = "Item " + nItems;
+                items[nItems].weight = nItems + 1;
+                items[nItems].hp = nItems + 2;
+                rooms[localizations[nItems]].itemsInRoom.Inserta(nItems);
+                nItems++;
+            }
+
+            //bucle para establecer conexiones
+            for (int i = 0; i < nRooms; i++)
+            {
+                if (i < nRooms - 2)
+                {
+                    rooms[i].connections[0] = i + 1;
+                    rooms[i + 1].connections[1] = i;
+                    rooms[i].connections[2] = i + 2;
+                    rooms[i + 2].connections[3] = i;
+                }
+                else
+                {
+                    rooms[i].connections[1] = i - 1;
+                    rooms[i - 1].connections[0] = i;
+                    rooms[i].connections[3] = i + 2;
+                    rooms[i - 2].connections[2] = i;
+                }
+            }
+
+            entryRoom = entryRoomIndex;
+            rooms[exitRoom].exit = true;
+        }
+        #endregion
     }
 }

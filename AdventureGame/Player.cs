@@ -4,13 +4,15 @@ using Listas;
 
 namespace Adventure
 {
-    class Player
+    //publico para tests de unidad
+    public class Player
     {
         string name; //nombre del jugador
         int pos; //lugar en el que se encuentra
         int hp; //numero de HP
         int weight; //peso de los objetos del inventario
-        Lista inventory; //lista de objetos en el inventario
+        //este valor es publico para TESTEO DE CONSTRUCTORA sin depender de Map en GetInventoryInfo()
+        public Lista inventory; //lista de objetos en el inventario
 
         const int MAX_HP = 10; //numero maximo de HP
         const int HP_PER_MOVEMENT = 2; //HP consumido por movimiento
