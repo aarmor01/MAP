@@ -15,9 +15,9 @@ namespace Tests
         {
             map = new Map(100, 100);
             map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4 }, 5, 0);
-            player = new Player("Gato de Guillermo", map.GetEntryRoom());
-            player2 = new Player("Gato de Guillermo", 1);
-            player3 = new Player("Gato de Guillermo", 3);
+            player = new Player("Gato de Guillermo", map.GetEntryRoom()); //comienza en la sala 0
+            player2 = new Player("Gato de Guillermo", 1); //comienza en la sala 1
+            player3 = new Player("Gato de Guillermo", 3); //Comienza en la sala 2
         }
 
         #region Test_Player()
@@ -40,6 +40,7 @@ namespace Tests
         #endregion
 
         #region Test_Move()
+        //comprueba que Move() funciona cuando existe una conexión hacia el norte
         [Test]
         public void MoveExisteConexionNorte()
         {
@@ -50,7 +51,7 @@ namespace Tests
             Assert.That(player.GetPosition(), Is.EqualTo(1), "Error: el jugador no ha avanzado a la habitación corresponidente");
             Assert.That(player.GetHP(), Is.EqualTo(HPinicial - player.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
-
+        //comprueba que Move() funciona cuando no existe una conexión hacia el norte
         [Test]
         public void MoveNoExisteConexionNorte()
         {
@@ -62,6 +63,7 @@ namespace Tests
             Assert.That(player3.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona cuando existe una conexión hacia el sur
         [Test]
         public void MoveExisteConexionSur()
         {
@@ -73,6 +75,7 @@ namespace Tests
             Assert.That(player2.GetHP(), Is.EqualTo(HPinicial - player2.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona cuando no existe una conexión hacia el sur
         [Test]
         public void MoveNoExisteConexionSur()
         {
@@ -84,6 +87,7 @@ namespace Tests
             Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona cuando existe una conexión hacia el este
         [Test]
         public void MoveExisteConexionEste()
         {
@@ -95,6 +99,7 @@ namespace Tests
             Assert.That(player2.GetHP(), Is.EqualTo(HPinicial - player2.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona cuando no existe una conexión hacia el este
         [Test]
         public void MoveNoExisteConexionEste()
         {
@@ -106,6 +111,7 @@ namespace Tests
             Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move()funciona cuando existe una conexión hacia el oeste
         [Test]
         public void MoveExisteConexionOeste()
         {
@@ -117,6 +123,7 @@ namespace Tests
             Assert.That(player3.GetHP(), Is.EqualTo(HPinicial - player3.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona cuando no existe una conexión hacia el oeste
         [Test]
         public void MoveNoExisteConexionOeste()
         {
@@ -128,6 +135,7 @@ namespace Tests
             Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
         }
 
+        //comprueba que Move() funciona correctamente cuando la vida del jugador es 1
         [Test]
         public void MoveConVidaInicial1()
         {
