@@ -438,7 +438,7 @@ namespace Adventure
             {
                 rooms[nRooms].description = "Esta es la sala " + nRooms;
                 rooms[nRooms].connections = new int[4];
-                //este metodo solo iniciliza todo el array a -1, se usaba en Map, pero como
+                //este metodo solo iniciliaza todo el array a -1, se usaba en Map, pero como
                 //se sabe que funciona, lo utilizamos aqui tambien
                 //PREGUNTAR
                 InitializeConns(rooms[nRooms].connections);

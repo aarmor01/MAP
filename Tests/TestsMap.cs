@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Listas;
 using Adventure;
 
 namespace Tests
@@ -14,7 +13,7 @@ namespace Tests
         public void CreateMap()
         {
             map = new Map(100, 100);
-            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4}, 0, 5);
+            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4}, 5, 0);
         }
 
         #region Tests_FindItemByName()
@@ -68,6 +67,7 @@ namespace Tests
             Assert.That(map.GetListaElementosSala(5), Is.EqualTo(""), "Error: se ha eliminado un elemento de la sala pese a no haber items");
         }
 
+        //PREGUNTAR
         //comprueba que PickItemInRoom() funciona cuando no existe el elemento en una sala con items
         [Test]
         public void PickItemInRoomSalaConItemsNoEsta()
@@ -81,6 +81,7 @@ namespace Tests
             Assert.That(map.GetListaElementosSala(3), Is.EqualTo(listaElementosSala), "Error: se ha eliminado un elemento en la sala pese a no existir el item");
         }
 
+        //PREGUNTAR
         //comprueba que PickItemInRoom() funciona cuando existe el elemento en una sala con solo ese item
         [Test]
         public void PickItemInRoomSalaConUnItemEsta()

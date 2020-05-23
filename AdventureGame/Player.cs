@@ -11,8 +11,7 @@ namespace Adventure
         int pos; //lugar en el que se encuentra
         int hp; //numero de HP
         int weight; //peso de los objetos del inventario
-        //este valor es publico para TESTEO DE CONSTRUCTORA sin depender de Map en GetInventoryInfo()
-        public Lista inventory; //lista de objetos en el inventario
+        Lista inventory; //lista de objetos en el inventario
 
         const int MAX_HP = 10; //numero maximo de HP
         const int HP_PER_MOVEMENT = 2; //HP consumido por movimiento
@@ -179,5 +178,46 @@ namespace Adventure
                 inventory.Inserta(int.Parse(items[i])); //lo insertamos en el inventario
             }
         }
+
+        #region MetodosTestPlayer
+        //getters para obtener los distintos atributos del jugador para test de unidad
+        #region Getters
+        public int GetMAXHP()
+        {
+            return MAX_HP;
+        }
+
+        public int GetHPPERMOVEMENT()
+        {
+            return HP_PER_MOVEMENT;
+        }
+
+        public Lista GetInventory()
+        {
+            return inventory;
+        }
+
+        public int GetHP()
+        {
+            return hp;
+        }
+
+        public int GetPeso()
+        {
+            return weight;
+        }
+        #endregion
+        //metodo auxiliar para establecer un peso de inventario específico para los tests de unidad
+        public void ForzarPeso(int nuevoPeso)
+        {
+            weight = nuevoPeso;
+        }
+
+        //metodo auxiliar para establecer un HP específico para los tests de unidad
+        public void ForzarHP(int nuevoHP)
+        {
+            hp = nuevoHP;
+        }
+        #endregion
     }
 }
