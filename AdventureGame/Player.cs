@@ -206,6 +206,11 @@ namespace Adventure
         {
             return weight;
         }
+
+        public int GetPesoMaximo()
+        {
+            return MAX_WEIGHT;
+        }
         #endregion
         //metodo auxiliar para establecer un peso de inventario específico para los tests de unidad
         public void ForzarPeso(int nuevoPeso)
@@ -217,6 +222,14 @@ namespace Adventure
         public void ForzarHP(int nuevoHP)
         {
             hp = nuevoHP;
+        }
+
+        public void ForzarInventario(int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                inventory.Inserta(i);
+            }
         }
         #endregion
     }

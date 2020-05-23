@@ -13,7 +13,7 @@ namespace Tests
         public void CreateMap()
         {
             map = new Map(100, 100);
-            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4}, 5, 0);
+            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4 }, 5, 0);
         }
 
         #region Tests_FindItemByName()
@@ -43,7 +43,7 @@ namespace Tests
             //Act-Assert
             Assert.That(map.FindItemByName("Item 4"), Is.EqualTo(4), "Error: el método no devuelve el indice del item para el ultimo elemento");
         }
-        
+
         //comprueba que FindItemByName() funciona cuando se introduce un elemento que no existe
         [Test]
         public void FindItemByNameNoExiste()
@@ -67,7 +67,6 @@ namespace Tests
             Assert.That(map.GetListaElementosSala(5), Is.EqualTo(""), "Error: se ha eliminado un elemento de la sala pese a no haber items");
         }
 
-        //PREGUNTAR
         //comprueba que PickItemInRoom() funciona cuando no existe el elemento en una sala con items
         [Test]
         public void PickItemInRoomSalaConItemsNoEsta()

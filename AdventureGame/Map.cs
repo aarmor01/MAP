@@ -453,8 +453,8 @@ namespace Adventure
             {
                 items[nItems].description = "Este es el item " + nItems;
                 items[nItems].name = "Item " + nItems;
-                items[nItems].weight = nItems + 1;
-                items[nItems].hp = nItems + 2;
+                items[nItems].weight = nItems + 3;
+                items[nItems].hp = nItems;
                 rooms[localizations[nItems]].itemsInRoom.Inserta(nItems);
                 nItems++;
             }

@@ -110,7 +110,7 @@ namespace Tests
             Assert.That(listaNoVacia.nElems, Is.EqualTo(nElemsPrevio - 1), "Error: Debería reducirse el numero de elementos en uno");
             Assert.That(listaNoVacia.VerLista(), Is.EqualTo("2_3_"), "Error: La lista resultante de la eliminacion difiere con la prevista");
         }
-        
+
         [Test]
         //comprueba que l.BorraElemento() funciona para una lista de varios elemento cuando se intenta borra el ultimo elemento
         public void BorraElementoUltimoListaNoVacia()
@@ -122,7 +122,7 @@ namespace Tests
             Assert.That(listaNoVacia.nElems, Is.EqualTo(nElemsPrevio - 1), "Error: Debería reducirse el numero de elementos en uno");
             Assert.That(listaNoVacia.VerLista(), Is.EqualTo("1_2_"), "Error: La lista resultante de la eliminacion difiere con la prevista");
         }
-        
+
         [Test]
         //comprueba que l.BorraElemento() funciona para una lista de varios elemento cuando se intenta borra un elemento medio
         public void BorraElementoMedioListaNoVacia()
@@ -134,7 +134,7 @@ namespace Tests
             Assert.That(listaNoVacia.nElems, Is.EqualTo(nElemsPrevio - 1), "Error: Debería reducirse el numero de elementos en uno");
             Assert.That(listaNoVacia.VerLista(), Is.EqualTo("1_3_"), "Error: La lista resultante de la eliminacion difiere con la prevista");
         }
-        
+
         [Test]
         //comprueba que l.BorraElemento() funciona para una lista de varios elemento cuando se intenta borra un elemento que no existe
         public void BorraElementoNoExisteListaNoVacia()
@@ -146,7 +146,7 @@ namespace Tests
             Assert.That(listaNoVacia.nElems, Is.EqualTo(nElemsPrevio), "Error: Debería mantenerse el numero de elementos");
             Assert.That(listaNoVacia.VerLista(), Is.EqualTo("1_2_3_"), "Error: La lista resultante de la eliminacion difiere con la prevista");
         }
-        
+
         [Test]
         //comprueba que l.BorraElemento() funciona para una lista de varios elemento cuando se intenta borra un elemento medio repetido posteriormente
         public void BorraElementoListaNoVaciaConRepeticion()
@@ -167,25 +167,25 @@ namespace Tests
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( () => { listaVacia.N_Esimo(7); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
+            Assert.That(() => { listaVacia.N_Esimo(7); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
         }
-        
+
         [Test]
         //comprueba que l.N_Esimo() funciona correctamente para una lista no vacía al no existir la posicion por la izquierda
         public void N_EsimoNoExistePosicionExtremoIzquierdoListaNoVacia()
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( () => { listaNoVacia.N_Esimo(0); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
+            Assert.That(() => { listaNoVacia.N_Esimo(0); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
         }
-        
+
         [Test]
         //comprueba que l.N_Esimo() funciona correctamente para una lista no vacía al no existir la posicion por la derecha
         public void N_EsimoNoExistePosicionExtremoDerechoListaNoVacia()
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( () => { listaNoVacia.N_Esimo(listaNoVacia.nElems + 1); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
+            Assert.That(() => { listaNoVacia.N_Esimo(listaNoVacia.nElems + 1); }, Throws.Exception, "Error: N_Esimo no lanza excepción pese a que no existe la posicion introducida");
         }
 
         [Test]
@@ -194,23 +194,23 @@ namespace Tests
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( EjecucionN_EsimoTestsDeUnidad, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
-            Assert.That( elem, Is.EqualTo(2), "Error: N_Esimo no devuelve el valor de la posicion introducida");
+            Assert.That(EjecucionN_EsimoTestsDeUnidad, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
+            Assert.That(elem, Is.EqualTo(2), "Error: N_Esimo no devuelve el valor de la posicion introducida");
         }
 
         private void EjecucionN_EsimoTestsDeUnidad() //metodo auxiliar de ejecucion del aserto en N_EsimoExistePosicionListaNoVacia()
         {
             elem = listaNoVacia.N_Esimo(2);
         }
-        
+
         [Test]
         //comprueba que l.N_Esimo() funciona correctamente para una lista no vacía en su extremo izquierdo
         public void N_EsimoExistePrimeraPosicionListaNoVacia()
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( EjecucionN_EsimoTestsDeUnidadPrimeraPosicion, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
-            Assert.That( elem, Is.EqualTo(1), "Error: N_Esimo no devuelve el valor de la posicion introducida");
+            Assert.That(EjecucionN_EsimoTestsDeUnidadPrimeraPosicion, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
+            Assert.That(elem, Is.EqualTo(1), "Error: N_Esimo no devuelve el valor de la posicion introducida");
         }
 
         private void EjecucionN_EsimoTestsDeUnidadPrimeraPosicion() //metodo auxiliar de ejecucion del aserto en N_EsimoExistePrimeraPosicionListaNoVacia()
@@ -224,8 +224,8 @@ namespace Tests
         {
             //Arrange en SetUp
             //Act-Assert
-            Assert.That( EjecucionN_EsimoTestsDeUnidadUltimaPosicion, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
-            Assert.That( elem, Is.EqualTo(3), "Error: N_Esimo no devuelve el valor de la posicion introducida");
+            Assert.That(EjecucionN_EsimoTestsDeUnidadUltimaPosicion, Throws.Nothing, "Error: N_Esimo lanza excepción pese a que existe la posicion introducida");
+            Assert.That(elem, Is.EqualTo(3), "Error: N_Esimo no devuelve el valor de la posicion introducida");
         }
 
         private void EjecucionN_EsimoTestsDeUnidadUltimaPosicion() //metodo auxiliar de ejecucion del aserto en N_EsimoExisteUltimaPosicionListaNoVacia()

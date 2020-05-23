@@ -14,10 +14,11 @@ namespace Tests
         public void CreateMapYPlayer()
         {
             map = new Map(100, 100);
-            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 4 }, 5, 0);
-            player = new Player("Gato de Guillermo", map.GetEntryRoom()); //comienza en la sala 0
-            player2 = new Player("Gato de Guillermo", 1); //comienza en la sala 1
-            player3 = new Player("Gato de Guillermo", 3); //Comienza en la sala 2
+            map.CreateMap(6, 5, new int[] { 3, 2, 3, 1, 0 }, 5, 0);
+            //player, player2, y player3 comienzan en distintas salas para las pruebas de Move() [conexiones] y PickItem()/EatItem() [items en la sala]
+            player = new Player("Gato de Guillermo", map.GetEntryRoom()); //comienza en la sala 0 --> conn = {1, -1, -1, -1}
+            player2 = new Player("Gato de Guillermo", 1); //comienza en la sala 1 --> conn = {2, 0, 4, -1}
+            player3 = new Player("Gato de Guillermo", 3); //comienza en la sala 3 --> conn = {-1, 4, -1, 2}
         }
 
         #region Test_Player()
@@ -27,15 +28,14 @@ namespace Tests
         {
             //PREGUNTAR
             //Arrange
-            Player playerTest = new Player("Gato de Guillermo", 1);
             int MAX_HP = player.GetMAXHP();
 
             //Act-Assert
             //PREGUNTAR SI HAY QUE HACERLO SEPARADO
-            Assert.That(playerTest.GetPlayerInfo(), Is.EqualTo("Name: Gato de Guillermo HP: " + MAX_HP + " Inventory weight: 0"),
+            Assert.That(player2.GetPlayerInfo(), Is.EqualTo("Name: Gato de Guillermo HP: " + MAX_HP + " Inventory weight: 0"),
                 "Error: El nombre del jugador, HP del mismo o peso de su inventario no están bien establecido/s");
-            Assert.That(playerTest.GetPosition(), Is.EqualTo(1), "Error: sala inicial establecida erroneamente");
-            Assert.That(playerTest.GetInventory().VerLista(), Is.EqualTo(""), "Error: inventario creado erroneamente");
+            Assert.That(player2.GetPosition(), Is.EqualTo(1), "Error: sala inicial establecida erroneamente");
+            Assert.That(player2.GetInventory().VerLista(), Is.EqualTo(""), "Error: inventario creado erroneamente");
         }
         #endregion
 
@@ -149,26 +149,145 @@ namespace Tests
         }
         #endregion
 
+        /// <summary>
+        /// Exception ex = Assert.Catch(() => { player.EatItem(map, "Item 9"); }, "Error excepcion");
+        /// Assert.That(ex.Message, Is.EqualTo("Item doesn't exist."));
+        /// no sabemos si esto es legal
+        /// </summary>
         #region Test_PickItem()
         //comprueba que PickItem() funciona cuando se introduce un elemento que no existe en el mapa
         [Test]
-        public void PickItemNoExisteMapa()
+        public void PickItemNoExisteEnMapa()
         {
             //Arrange de 'map' y 'player' en SetUp
             int pesoPrevio = player.GetPeso();
             //Act-Assert
-            Assert.That(() => { player.PickItem(map, "Item 9"); }, Throws.Exception, "Error: no se lanza excepcion pese a que el item no existe en el mapa");
+            Assert.That(() => { player.PickItem(map, "Item 9"); }, Throws.Exception, "Error: no se lanza excepcion pese a que el item no existe en la sala");
             Assert.That(player.GetPeso(), Is.EqualTo(pesoPrevio), "Error: ha variado el peso del inventario pese a que no se ha cogido el objeto");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(""), "Error: se ha añadido un item inexistente en el inventario");
         }
 
+        //comprueba que PickItem() funciona cuando se introduce un elemento que no existe en la sala, pese a estar en el mapa
+        [Test]
+        public void PickItemNoExisteEnSala()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            int pesoPrevio = player.GetPeso();
+            //Act-Assert
+            Assert.That(() => { player.PickItem(map, "Item 0"); }, Throws.Exception, "Error: no se lanza excepcion pese a que el item no existe en la sala");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoPrevio), "Error: ha variado el peso del inventario pese a que no se ha cogido el objeto");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(""), "Error: se ha añadido un item que no está en la sala al inventario");
+        }
 
+        //comprueba que PickItem() funciona cuando se introduce un elemento que existe en la sala, pero excede el peso maximo del inventario
+        [Test]
+        public void PickItemPesoExcedeMaximo()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            //Act
+            player.ForzarInventario(4); //inserta de 0 a 3
+            player.ForzarPeso(18); //Item n.weight = n + 3 --> 3 + 4 + 5 + 6
+            string inventario = player.GetInventory().VerLista(); //0_1_2_3_
+            int pesoPrevio = player.GetPeso();
+            //Assert
+            Assert.That(() => { player.PickItem(map, "Item 4"); }, Throws.Exception, "Error: no se lanza excepcion pese a que el item no cabe en el inventario");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoPrevio), "Error: ha variado el peso del inventario pese a que no se ha cogido el objeto");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(inventario), "Error: se ha añadido un item que no cabe en el inventario");
+        }
+
+        //COMPROBAR CON PESO MAXIMO??
+        //comprueba que PickItem() funciona cuando se introduce un elemento que existe en la sala, pero el inventario está al maximo de peso (MAX_WEIGHT)
+        [Test]
+        public void PickItemPesoExcedeMaximoMaxWeight()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            //Act
+            player.ForzarPeso(player.GetPesoMaximo());
+
+            //Assert
+            Assert.That(() => { player.PickItem(map, "Item 4"); }, Throws.Exception, "Error: no se lanza excepcion pese a que el item no cabe en el inventario");
+            Assert.That(player.GetPeso(), Is.EqualTo(player.GetPesoMaximo()), "Error: ha variado el peso del inventario pese a que no se ha cogido el objeto");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(""), "Error: se ha añadido un item que no cabe en el inventario");
+        }
+
+        //comprueba que PickItem() funciona cuando se introduce un elemento en el inventario vacío
+        [Test]
+        public void PickItemInventarioVacio()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            int pesoPrevio = player.GetPeso();
+            //Act-Assert
+            Assert.That(() => { player.PickItem(map, "Item 4"); }, Throws.Nothing, "Error: se lanza excepcion pese a que el item puede ser introducido en el inventario");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoPrevio + map.GetItemWeight(4)), "Error: no ha variado el peso del inventario pese a que se ha cogido el objeto");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo("4_"), "Error: no se ha añadido el item pese a que cabe en el inventario");
+        }
+
+        //comprueba que PickItem() funciona cuando se introduce un elemento en el inventario no vacío
+        [Test]
+        public void PickItemInventarioNoVacio()
+        {
+            //Arrange de 'map' y 'player3' en SetUp (player3 está en la sala 3, que tiene el Item 0 y 2)
+            //Act
+            player3.ForzarPeso(7); //3 + 4 (Item 0 y 1)
+            player3.ForzarInventario(2);
+            string inventario = player3.GetInventory().VerLista();
+
+            //Assert
+            Assert.That(() => { player3.PickItem(map, "Item 2"); }, Throws.Nothing, "Error: se lanza excepcion pese a que el item puede ser introducido en el inventario");
+            Assert.That(player3.GetPeso(), Is.EqualTo(7 + map.GetItemWeight(2)), "Error: no ha variado el peso del inventario pese a que se ha cogido el objeto");
+            Assert.That(player3.GetInventory().VerLista(), Is.EqualTo(inventario + "2_"), "Error: no se ha añadido el item pese a que cabe en el inventario");
+        }
         #endregion
 
         #region Test_EatItem()
         [Test]
-        public void EatItemNoExisteMapa()
+        public void EatItemNoExisteItemMapa()
         {
             //Arrange de 'map' y 'player' en SetUp
+
+            //Act-Assert
+            Assert.That(() => { player.PickItem(map, "Item 9"); }, Throws.Exception, "");
+
+        }
+
+        public void EatItemExisteItemMapa()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            var ex = Assert.Catch(() => { player.EatItem(map, "Item 9"); }, "Error excepcion");
+            Assert.That(ex.Message, Is.EqualTo("Actual exception message"));
+            //Act-Assert
+
+        }
+
+        [Test]
+        public void EatItemNoExisteItemSala()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+
+            //Act-Assert
+        }
+
+        [Test]
+        public void EatItemNoExisteItemInventario()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+
+            //Act-Assert
+        }
+
+        [Test]
+        public void EatItemNoComestible()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+
+            //Act-Assert
+        }
+
+        [Test]
+        public void EatItemComestible()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+
             //Act-Assert
         }
         #endregion
