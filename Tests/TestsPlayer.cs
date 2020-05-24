@@ -240,55 +240,100 @@ namespace Tests
         #endregion
 
         #region Test_EatItem()
+        //comprueba que EatItem() funciona correctamente cuando el item no existe en el mapa
         [Test]
         public void EatItemNoExisteItemMapa()
         {
             //Arrange de 'map' y 'player' en SetUp
-
+            string listaInicial = player.GetInventory().VerLista();
+            int HPinicial = player.GetHP();
+            int pesoInicial = player.GetPeso();
             //Act-Assert
-            Assert.That(() => { player.PickItem(map, "Item 9"); }, Throws.Exception, "");
-
+            Assert.That(() => { player.EatItem(map, "Item 9"); }, Throws.Exception, "Error: No existe el item en el mapa");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(listaInicial), "Error: la lista ha cambiado cuando no debería");
+            Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida ha cambiado cuando no debería");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial), "Error: el peso ha cambiado cuando no debería");
         }
 
-        public void EatItemExisteItemMapa()
-        {
-            //Arrange de 'map' y 'player' en SetUp
-            var ex = Assert.Catch(() => { player.EatItem(map, "Item 9"); }, "Error excepcion");
-            Assert.That(ex.Message, Is.EqualTo("Actual exception message"));
-            //Act-Assert
-
-        }
-
-        [Test]
-        public void EatItemNoExisteItemSala()
-        {
-            //Arrange de 'map' y 'player' en SetUp
-
-            //Act-Assert
-        }
-
+        //comprueba que EatItem() funciona correctamente cuando el item no existe en el inventario
         [Test]
         public void EatItemNoExisteItemInventario()
         {
             //Arrange de 'map' y 'player' en SetUp
-
+            string listaInicial = player.GetInventory().VerLista();
+            int HPinicial = player.GetHP();
+            int pesoInicial = player.GetPeso();
             //Act-Assert
+            Assert.That(() => { player.EatItem(map, "Item 1"); }, Throws.Exception, "Error: No existe el item en el inventario");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(listaInicial), "Error: la lista ha cambiado cuando no debería");
+            Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida ha cambiado cuando no debería");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial), "Error: el peso ha cambiado cuando no debería");
         }
 
+        //comprueba que EatItem() funciona correctamente cuando el item no es comestible, es decir, su hp es 0
         [Test]
         public void EatItemNoComestible()
         {
             //Arrange de 'map' y 'player' en SetUp
-
+            string listaInicial = player.GetInventory().VerLista();
+            int HPinicial = player.GetHP();
+            int pesoInicial = player.GetPeso();
             //Act-Assert
+            Assert.That(() => { player.EatItem(map, "Item 0"); }, Throws.Exception, "Error: El item no es comestible (su hp es 0)");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo(listaInicial), "Error: la lista ha cambiado cuando no debería");
+            Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida ha cambiado cuando no debería");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial), "Error: el peso ha cambiado cuando no debería");
         }
 
+        //comprueba que EatItem() funciona correctamente cuando el item existe en el inventario y en el mapa, además de ser comestible
         [Test]
         public void EatItemComestible()
         {
             //Arrange de 'map' y 'player' en SetUp
-
+            player.ForzarInventario(2);  //inserta de 0 a 1
+            player.ForzarPeso(12); //Item n.weight = n + 3 --> 3 + 4 + 5
+            player.ForzarHP(5);  //La vida se cambia a 5
+            string listaInicial = player.GetInventory().VerLista();
+            int HPinicial = player.GetHP();
+            int pesoInicial = player.GetPeso();
             //Act-Assert
+            Assert.That(() => { player.EatItem(map, "Item 1"); }, Throws.Nothing, "Error: El item es comestible, pero se ha producido una excepción");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo("0_"), "Error: no se ha borrado el item de la lista correctamente");
+            Assert.That(player.GetHP(), Is.EqualTo(HPinicial + 1), "Error: la vida no se ha sumado correctamente");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial - 4), "Error: el peso no se ha restado correctamente");
+        }
+
+        //comprueba que EatItem() funciona correctamente cuando el jugador tiene su hp máximo
+        [Test]
+        public void EatItemComestibleConMaxHP()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            player.ForzarInventario(2);  //inserta de 0 a 1
+            player.ForzarPeso(12); //Item n.weight = n + 3 --> 3 + 4 + 5
+            string listaInicial = player.GetInventory().VerLista();
+            int pesoInicial = player.GetPeso();
+            //Act-Assert
+            Assert.That(() => { player.EatItem(map, "Item 1"); }, Throws.Nothing, "Error: El item es comestible, pero se ha producido una excepción");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo("0_"), "Error: no se ha borrado el item de la lista correctamente");
+            Assert.That(player.GetHP(), Is.EqualTo(player.GetMAXHP()), "Error: la vida no se ha sumado correctamente");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial - 4), "Error: el peso no se ha restado correctamente");
+        }
+
+        //comprueba que EatItem() funciona correctamente cuando el jugador se come un item que le daría un hp superior al máximo si no se controlase
+        [Test]
+        public void EatItemComestibleConCasiMaxHP()
+        {
+            //Arrange de 'map' y 'player' en SetUp
+            player.ForzarInventario(4);  //inserta de 0 a 3
+            player.ForzarPeso(18); //Item n.weight = n + 3 --> 3 + 4 + 5 + 6
+            player.ForzarHP(8);  //La vida se cambia a 8
+            string listaInicial = player.GetInventory().VerLista();
+            int pesoInicial = player.GetPeso();
+            //Act-Assert
+            Assert.That(() => { player.EatItem(map, "Item 3"); }, Throws.Nothing, "Error: El item es comestible, pero se ha producido una excepción");
+            Assert.That(player.GetInventory().VerLista(), Is.EqualTo("0_1_2_"), "Error: no se ha borrado el item de la lista correctamente");
+            Assert.That(player.GetHP(), Is.EqualTo(player.GetMAXHP()), "Error: la vida no se ha sumado correctamente");
+            Assert.That(player.GetPeso(), Is.EqualTo(pesoInicial - 6), "Error: el peso no se ha restado correctamente");
         }
         #endregion
     }
