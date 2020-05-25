@@ -51,6 +51,7 @@ namespace Tests
             Assert.That(player.GetPosition(), Is.EqualTo(1), "Error: el jugador no ha avanzado a la habitación corresponidente");
             Assert.That(player.GetHP(), Is.EqualTo(HPinicial - player.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
+
         //comprueba que Move() funciona cuando no existe una conexión hacia el norte
         [Test]
         public void MoveNoExisteConexionNorte()
@@ -195,7 +196,6 @@ namespace Tests
             Assert.That(player.GetInventory().VerLista(), Is.EqualTo(inventario), "Error: se ha añadido un item que no cabe en el inventario");
         }
 
-        //COMPROBAR CON PESO MAXIMO??
         //comprueba que PickItem() funciona cuando se introduce un elemento que existe en la sala, pero el inventario está al maximo de peso (MAX_WEIGHT)
         [Test]
         public void PickItemPesoExcedeMaximoMaxWeight()

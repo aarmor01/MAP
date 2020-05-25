@@ -22,8 +22,10 @@ namespace Tests
         public void FindItemByNameElementoMedio()
         {
             //Arrange en SetUp
-            //Act-Assert
-            Assert.That(map.FindItemByName("Item 2"), Is.EqualTo(2), "Error: el método no devuelve el indice del item para un elemento medio");
+            //Act
+            int item = map.FindItemByName("Item 2");
+            //Assert
+            Assert.That(item, Is.EqualTo(2), "Error: el método no devuelve el indice del item para un elemento medio");
         }
 
         //comprueba que FindItemByName() funciona para el primer elemento
@@ -31,8 +33,10 @@ namespace Tests
         public void FindItemByNamePrimerElemento()
         {
             //Arrange en SetUp
-            //Act-Assert
-            Assert.That(map.FindItemByName("Item 0"), Is.EqualTo(0), "Error: el método no devuelve el indice del item para el primer elemento");
+            //Act
+            int item = map.FindItemByName("Item 0");
+            //Assert
+            Assert.That(item, Is.EqualTo(0), "Error: el método no devuelve el indice del item para el primer elemento");
         }
 
         //comprueba que FindItemByName() funciona para el ultimo elemento
@@ -40,8 +44,10 @@ namespace Tests
         public void FindItemByNameUltimoElemento()
         {
             //Arrange en SetUp
-            //Act-Assert
-            Assert.That(map.FindItemByName("Item 4"), Is.EqualTo(4), "Error: el método no devuelve el indice del item para el ultimo elemento");
+            //Act
+            int item = map.FindItemByName("Item 4");
+            //Assert
+            Assert.That(item, Is.EqualTo(4), "Error: el método no devuelve el indice del item para el ultimo elemento");
         }
 
         //comprueba que FindItemByName() funciona cuando se introduce un elemento que no existe
@@ -49,8 +55,10 @@ namespace Tests
         public void FindItemByNameNoExiste()
         {
             //Arrange en SetUp
-            //Act-Assert
-            Assert.That(map.FindItemByName("Item 5"), Is.EqualTo(-1), "Error: el método devuelve un indice pese a que no existe el item");
+            //Act
+            int item = map.FindItemByName("Item 9");
+            //Assert
+            Assert.That(item, Is.EqualTo(-1), "Error: el método devuelve un indice pese a que no existe el item");
         }
         #endregion
 
@@ -78,19 +86,6 @@ namespace Tests
             Assert.That(map.PickItemInRoom(3, 1), Is.False, "Error: el metodo devuelve 'true' pese a no existir el item en la sala");
             Assert.That(map.GetNumeroElementosSala(3), Is.EqualTo(elementosSala), "Error: se ha reducido el nº de elementos en la sala pese a no existir el item");
             Assert.That(map.GetListaElementosSala(3), Is.EqualTo(listaElementosSala), "Error: se ha eliminado un elemento en la sala pese a no existir el item");
-        }
-
-        //PREGUNTAR
-        //comprueba que PickItemInRoom() funciona cuando existe el elemento en una sala con solo ese item
-        [Test]
-        public void PickItemInRoomSalaConUnItemEsta()
-        {
-            //Arrange de 'map' en SetUp
-            int elementosSala = map.GetNumeroElementosSala(2);
-            //Act-Assert
-            Assert.That(map.PickItemInRoom(2, 1), Is.True, "Error: el metodo devuelve 'false' pese a haber item en la sala");
-            Assert.That(map.GetNumeroElementosSala(2), Is.EqualTo(elementosSala - 1), "Error: no se ha reducido el nº de elementos en la sala");
-            Assert.That(map.GetListaElementosSala(2), Is.EqualTo(""), "Error: no se ha eliminado un elemento de la sala pese a existir el item");
         }
 
         //comprueba que PickItemInRoom() funciona cuando existe el elemento en una sala con items
