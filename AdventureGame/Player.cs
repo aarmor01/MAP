@@ -211,6 +211,11 @@ namespace Adventure
         {
             return MAX_WEIGHT;
         }
+
+        public string GetName()
+        {
+            return name;
+        }
         #endregion
 
         //metodo auxiliar para establecer un peso de inventario específico para los tests de unidad
@@ -225,9 +230,20 @@ namespace Adventure
             hp = nuevoHP;
         }
 
+        //metodo auxiliar para establecer un inventario
         public void ForzarInventario(int n)
         {
             for (int i = 0; i < n; i++)
+            {
+                inventory.Inserta(i);
+            }
+        }
+
+        //segundo metodo auxiliar para establecer un inventario
+        public void ForzarInventario2()
+        {
+            int[] items = new int[] { 0, 1, 3, 4 };
+            for (int i = 0; i < items.Length; i++)
             {
                 inventory.Inserta(i);
             }

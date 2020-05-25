@@ -125,7 +125,7 @@ namespace Tests
             //Act
             move = map.Move(0, Direction.North); //sala 0 conecta al norte con sala 1
             //Assert
-            Assert.That(move, Is.EqualTo(1), "Error: la habitación no tiene conexion al norte pese a que debería");
+            Assert.That(move, Is.EqualTo(1), "Error: la habitación no tiene conexión al norte pese a que debería");
         }
 
         //comprueba que Move() funciona correctamente cuando hay conexion al sur de la sala (devuelve el índice de la nueva sala)
@@ -136,7 +136,7 @@ namespace Tests
             //Act
             move = map.Move(3, Direction.South); //sala 3 conecta al sur con sala 4
             //Assert
-            Assert.That(move, Is.EqualTo(4), "Error: la habitación no tiene conexion al sur pese a que debería");
+            Assert.That(move, Is.EqualTo(4), "Error: la habitación no tiene conexión al sur pese a que debería");
         }
 
         //comprueba que Move() funciona correctamente cuando hay conexion al este de la sala (devuelve el índice de la nueva sala)
@@ -147,7 +147,7 @@ namespace Tests
             //Act
             move = map.Move(1, Direction.East); //sala 1 conecta al este con sala 4
             //Assert
-            Assert.That(move, Is.EqualTo(4), "Error: la habitación no tiene conexion al este pese a que debería");
+            Assert.That(move, Is.EqualTo(4), "Error: la habitación no tiene conexión al este pese a que debería");
         }
 
         //comprueba que Move() funciona correctamente cuando hay conexion al oeste de la sala (devuelve el índice de la nueva sala)
@@ -158,7 +158,7 @@ namespace Tests
             //Act
             move = map.Move(3, Direction.West); //sala 3 conecta al oeste con sala 2
             //Assert
-            Assert.That(move, Is.EqualTo(2), "Error: la habitación no tiene conexion al oeste pese a que debería");
+            Assert.That(move, Is.EqualTo(2), "Error: la habitación no tiene conexión al oeste pese a que debería");
         }
 
         //comprueba que Move() funciona correctamente cuando no hay conexion al norte de la sala (devuelve -1)
@@ -169,7 +169,7 @@ namespace Tests
             //Act
             move = map.Move(2, Direction.North);
             //Assert
-            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexion al norte pese a que no debería");
+            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexión al norte pese a que no debería");
         }
 
         //comprueba que Move() funciona correctamente cuando no hay conexion al sur de la sala (devuelve -1)
@@ -180,7 +180,7 @@ namespace Tests
             //Act
             move = map.Move(0, Direction.South);
             //Assert
-            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexion al sur pese a que no debería");
+            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexión al sur pese a que no debería");
         }
 
         //comprueba que Move() funciona correctamente cuando no hay conexion al este de la sala (devuelve -1)
@@ -191,7 +191,7 @@ namespace Tests
             //Act
             move = map.Move(3, Direction.East);
             //Assert
-            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexion al este pese a que no debería");
+            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexión al este pese a que no debería");
         }
 
         //comprueba que Move() funciona correctamente cuando no hay conexion al oeste de la sala (devuelve -1)
@@ -202,7 +202,7 @@ namespace Tests
             //Act
             move = map.Move(1, Direction.West);
             //Assert
-            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexion al oeste pese a que no debería");
+            Assert.That(move, Is.EqualTo(-1), "Error: la habitación tiene conexión al oeste pese a que no debería");
         }
         #endregion
     }
