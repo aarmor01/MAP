@@ -9,6 +9,8 @@ namespace Tests
     {
         Map map;
         Player player, player2, player3;
+        int hp, position, weight;
+        string inventory;
 
         [SetUp]
         public void CreateMapYPlayer()
@@ -19,6 +21,10 @@ namespace Tests
             player = new Player("Gato de Guillermo", map.GetEntryRoom()); //comienza en la sala 0 --> conn = {1, -1, -1, -1}
             player2 = new Player("Gato de Guillermo", 1); //comienza en la sala 1 --> conn = {2, 0, 4, -1}
             player3 = new Player("Gato de Guillermo", 3); //comienza en la sala 3 --> conn = {-1, 4, -1, 2}
+            //enteros para usar en los distintos tests
+            hp = position = weight = -2;
+            //string para usar en los distintos tests
+            inventory = ":)";
         }
 
         #region Test_Player()
@@ -26,16 +32,21 @@ namespace Tests
         [Test]
         public void ConstructoraPlayerFunciona()
         {
-            //PREGUNTAR
             //Arrange
             int MAX_HP = player.GetMAXHP();
-
-            //Act-Assert
-            //PREGUNTAR SI HAY QUE HACERLO SEPARADO
-            Assert.That(player2.GetPlayerInfo(), Is.EqualTo("Name: Gato de Guillermo HP: " + MAX_HP + " Inventory weight: 0"),
-                "Error: El nombre del jugador, HP del mismo o peso de su inventario no están bien establecido/s");
-            Assert.That(player2.GetPosition(), Is.EqualTo(1), "Error: sala inicial establecida erroneamente");
-            Assert.That(player2.GetInventory().VerLista(), Is.EqualTo(""), "Error: inventario creado erroneamente");
+            //Act
+            Player newPlayer = new Player("Gato de Guillermo", 2);
+            string name = newPlayer.GetName();
+            weight = newPlayer.GetPeso();
+            hp = newPlayer.GetHP();
+            position = newPlayer.GetPosition();
+            inventory = newPlayer.GetInventory().VerLista();
+            //Assert
+            Assert.That(name, Is.EqualTo("Gato de Guillermo"), "Error: nombre del jugador establecido erroneamente");
+            Assert.That(hp, Is.EqualTo(MAX_HP), "Error: HP establecido erroneamente");
+            Assert.That(weight, Is.EqualTo(0), "Error: peso del inventario establecido erroneamente");
+            Assert.That(position, Is.EqualTo(2), "Error: sala inicial establecida erroneamente");
+            Assert.That(inventory, Is.EqualTo(""), "Error: inventario creado erroneamente");
         }
         #endregion
 
@@ -46,34 +57,46 @@ namespace Tests
         {
             //Arrange de 'map' y 'player' en SetUp
             int HPinicial = player.GetHP();
-            //Act-Assert
-            Assert.That(player.Move(map, Direction.North), Is.True, "Error: el método devuelve false cuando existe la conexión ");
-            Assert.That(player.GetPosition(), Is.EqualTo(1), "Error: el jugador no ha avanzado a la habitación corresponidente");
-            Assert.That(player.GetHP(), Is.EqualTo(HPinicial - player.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
+            //Act
+            bool move = player.Move(map, Direction.North); //conexión norte --> sala 1
+            position = player.GetPosition();
+            hp = player.GetHP();
+            //Assert
+            Assert.That(move, Is.True, "Error: el método devuelve 'false' pese a que existe conexión");
+            Assert.That(position, Is.EqualTo(1), "Error: el jugador no ha avanzado a la habitación correspondiente");
+            Assert.That(hp, Is.EqualTo(HPinicial - player.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
 
         //comprueba que Move() funciona cuando no existe una conexión hacia el norte
         [Test]
         public void MoveNoExisteConexionNorte()
         {
-            //Arrange de 'map' y 'player' en SetUp
+            //Arrange de 'map' y 'player3' en SetUp
             int HPinicial = player3.GetHP();
-            //Act-Assert
-            Assert.That(player3.Move(map, Direction.North), Is.False, "Error: el método devuelve true cuando no existe la conexión ");
-            Assert.That(player3.GetPosition(), Is.EqualTo(3), "Error: el jugador ha avanzado a otra habitación cuando no debería");
-            Assert.That(player3.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
+            //Act
+            bool move = player3.Move(map, Direction.North); //conexión norte --> ninguna
+            position = player3.GetPosition();
+            hp = player3.GetHP();
+            //Assert
+            Assert.That(move, Is.False, "Error: el método devuelve 'true' pese a que no existe conexión");
+            Assert.That(position, Is.EqualTo(3), "Error: el jugador ha avanzado a otra habitación cuando no debería");
+            Assert.That(hp, Is.EqualTo(HPinicial), "Error: la vida ha variado cuando no debería");
         }
 
         //comprueba que Move() funciona cuando existe una conexión hacia el sur
         [Test]
         public void MoveExisteConexionSur()
         {
-            //Arrange de 'map' y 'player' en SetUp
+            //Arrange de 'map' y 'player2' en SetUp
             int HPinicial = player2.GetHP();
-            //Act-Assert
-            Assert.That(player2.Move(map, Direction.South), Is.True, "Error: el método devuelve false cuando existe la conexión ");
-            Assert.That(player2.GetPosition(), Is.EqualTo(0), "Error: el jugador no ha avanzado a la habitación corresponidente");
-            Assert.That(player2.GetHP(), Is.EqualTo(HPinicial - player2.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
+            //Act
+            bool move = player2.Move(map, Direction.South); //conexión sur --> sala 0
+            position = player2.GetPosition();
+            hp = player2.GetHP();
+            //Assert
+            Assert.That(move, Is.True, "Error: el método devuelve 'false' pese a que existe conexión");
+            Assert.That(position, Is.EqualTo(0), "Error: el jugador no ha avanzado a la habitación correspondiente");
+            Assert.That(hp, Is.EqualTo(HPinicial - player2.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");
         }
 
         //comprueba que Move() funciona cuando no existe una conexión hacia el sur
@@ -82,19 +105,24 @@ namespace Tests
         {
             //Arrange de 'map' y 'player' en SetUp
             int HPinicial = player.GetHP();
-            //Act-Assert
-            Assert.That(player.Move(map, Direction.South), Is.False, "Error: el método devuelve true cuando no existe la conexión ");
-            Assert.That(player.GetPosition(), Is.EqualTo(0), "Error: el jugador ha avanzado a otra habitación cuando no debería");
-            Assert.That(player.GetHP(), Is.EqualTo(HPinicial), "Error: la vida no se ha restado correctamente");
+            //Act
+            bool move = player.Move(map, Direction.South); //conexión sur --> ninguna
+            position = player.GetPosition();
+            hp = player.GetHP(); 
+            //Assert
+            Assert.That(move, Is.False, "Error: el método devuelve 'true' pese a que no existe conexión");
+            Assert.That(position, Is.EqualTo(0), "Error: el jugador ha avanzado a otra habitación cuando no debería");
+            Assert.That(hp, Is.EqualTo(HPinicial), "Error: la vida ha variado cuando no debería");
         }
 
         //comprueba que Move() funciona cuando existe una conexión hacia el este
         [Test]
         public void MoveExisteConexionEste()
         {
-            //Arrange de 'map' y 'player' en SetUp
+            //Arrange de 'map' y 'player2' en SetUp
             int HPinicial = player2.GetHP();
-            //Act-Assert
+            //Act
+            //Assert
             Assert.That(player2.Move(map, Direction.East), Is.True, "Error: el método devuelve false cuando existe la conexión ");
             Assert.That(player2.GetPosition(), Is.EqualTo(4), "Error: el jugador no ha avanzado a la habitación corresponidente");
             Assert.That(player2.GetHP(), Is.EqualTo(HPinicial - player2.GetHPPERMOVEMENT()), "Error: la vida no se ha restado correctamente");

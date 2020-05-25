@@ -440,7 +440,6 @@ namespace Adventure
                 rooms[nRooms].connections = new int[4];
                 //este metodo solo iniciliaza todo el array a -1, se usaba en Map, pero como
                 //se sabe que funciona, lo utilizamos aqui tambien
-                //PREGUNTAR
                 InitializeConns(rooms[nRooms].connections);
                 rooms[nRooms].name = "Sala " + nRooms;
                 rooms[nRooms].exit = false;
@@ -479,6 +478,7 @@ namespace Adventure
             rooms[2].connections[0] = -1;
             rooms[5].connections[1] = -1;
 
+            //entry room y exit
             entryRoom = entryRoomIndex;
             rooms[exitRoom].exit = true;
         }

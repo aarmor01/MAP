@@ -166,7 +166,7 @@ namespace Adventure
                 i++;
             }
 
-            //devlvemos la informacion
+            //devolvemos la informacion
             return inventario;
         }
 
@@ -187,6 +187,11 @@ namespace Adventure
             return MAX_HP;
         }
 
+        public int GetHP()
+        {
+            return hp;
+        }
+
         public int GetHPPERMOVEMENT()
         {
             return HP_PER_MOVEMENT;
@@ -195,11 +200,6 @@ namespace Adventure
         public Lista GetInventory()
         {
             return inventory;
-        }
-
-        public int GetHP()
-        {
-            return hp;
         }
 
         public int GetPeso()
@@ -212,6 +212,7 @@ namespace Adventure
             return MAX_WEIGHT;
         }
         #endregion
+
         //metodo auxiliar para establecer un peso de inventario específico para los tests de unidad
         public void ForzarPeso(int nuevoPeso)
         {
